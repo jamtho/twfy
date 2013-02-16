@@ -1,4 +1,4 @@
-;;;; twfy-cl.asd
+;;;; twfy.asd
 
 (asdf:defsystem #:twfy
   :serial t
