@@ -4,13 +4,10 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Constants
+;;; Specials
 
 (defvar *api-key* nil
   "API key (register for one at http://www.theyworkforyou.com/api/key)")
-
-(defparameter *base-uri* "http://www.theyworkforyou.com/api/"
-  "Root for all twfy api calls")
 
 (defvar *decode-response* t
   "If set, and *output-format* is \"js\", API responses will be decoded from
@@ -19,6 +16,9 @@ json to lisp objects with cl-json.")
 (defvar *output-format* "js"
   "Passed in the querystring to control the API response format; values can be
 \"js\", \"xml\", \"php\", or \"rabx\".")
+
+(defparameter *base-uri* "http://www.theyworkforyou.com/api/"
+  "Root for all twfy api calls")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
