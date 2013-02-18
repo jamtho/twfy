@@ -75,7 +75,7 @@ arbitrary query string parameters alist PARAMS. Respects *decode-response*."
   "Helper for DEFINE-API-COMMAND. Creates an alist of (lower-case-symbol-
 name-string . symbol-val) pairs, using each member of list SYMBOLS."
   `(list ,@(mapcar (lambda (sym)
-                     `(cons (format nil "~(~A~)" ',sym)
+                     `(cons ,(format nil "~(~A~)" sym)
                             ,sym))
                    symbols)))
 
