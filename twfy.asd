@@ -4,7 +4,7 @@
   :serial t
   :description "TheyWorkForYou API bindings"
   :author "James Thompson <james@jamtho.com>"
-  ;; :license "Specify license here"
+  :license "BSD-style"
   :depends-on (:drakma
                :cl-json)
   :components ((:file "package")
