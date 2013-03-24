@@ -3,9 +3,7 @@ TheyWorkForYou - Common Lisp bindings
 
 Common Lisp bindings for the TheyWorkForYou API (UK political data).
 
-These are really just for my use at the moment, so have some rough edges.
-I've noticed a couple of text encoding screw-ups, though some of these seem
-to come from the server.
+These are really just for my use at the moment, so have a few rough edges.
 
 Official API docs are here: http://www.theyworkforyou.com/api/
 
