@@ -53,19 +53,14 @@ arbitrary query string parameters alist PARAMS. Respects *decode-response*."
                                   (append `(("key" . ,*api-key*)
                                             ("output" . ,*output-format*))
                                           (clean-alist params)))))
-    (if (stringp res)
-        (if (and (equal *output-format* "js")
-                 *decode-response*)
-            (decode-json res)
-            res)
-        ;; Boundary data is always KML, and its Content-Type is treated as
-        ;; binary by Drakma. We just return the xml as-is.
-        ;; 
-        ;; FIXME this is a fudge, as it relies on the only non-*ouput-format*-
-        ;; obeying response having an unusual Content-Type.
-        ;; I should override *output-format* for this, and do a 'if not a
-        ;; string then make a string' conversion for all responses.
-        (flexi-streams:octets-to-string res))))
+    ;; Content-Type for "getBoundary" data is KML, and Drakma treats this
+    ;; as binary.
+    (unless (stringp res)
+      (setq res (flexi-streams:octets-to-string res)))
+    (if (and (equal *output-format* "js")
+             *decode-response*)
+        (decode-json res)
+        res)))
    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -79,15 +74,20 @@ name-string . symbol-val) pairs, using each member of list SYMBOLS."
                             ,sym))
                    symbols)))
 
-(defmacro define-api-command (fun-name api-fun-name params-list docstring)
+(defmacro define-api-command (fun-name api-fun-name params-list docstring
+                              &key returned-format)
   "Defines a function FUN-NAME, calling API command (string) API-FUN-NAME,
 taking optional parameters symbol list PARAMS-LIST, with documentation
-DOCSTRING."
+DOCSTRING. If the API command is only able to return one format, override
+*OUTPUT-FORMAT* for the defined calls by setting RETURNED-FORMAT to the
+correct format string."
   `(defun ,fun-name (&key ,@params-list)
      ,docstring
-     (call-api ,api-fun-name
-               (alist-builder ,@params-list))))
-            
+     (let ,(when returned-format
+                 `((*output-format* ,returned-format)))
+       (call-api ,api-fun-name
+                 (alist-builder ,@params-list)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define the API commands
@@ -327,7 +327,8 @@ Returns the bounding polygon of the constituency, in KML format (see mapit.mysoc
 Arguments:
 
 - name
-    Name of the constituency.")
+    Name of the constituency."
+  :returned-format "xml")
 
 
 ;;; Committees
